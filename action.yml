@@ -32,7 +32,7 @@ runs:
         path: |
           ~/.cargo/bin
           ~/.avm
-          ~/opt/hostedtoolcache/node
+          /opt/hostedtoolcache/node
         key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}
     - name: Install Anchor
       id: install-anchor
