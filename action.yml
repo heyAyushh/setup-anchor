@@ -32,14 +32,17 @@ runs:
         path: |
           ~/.cargo/bin
           ~/.avm
-          ~/nvm/current/bin
+          ${{ steps.install-anchor.outputs.anchor-dir }}
         key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}
     - name: Install Anchor
+      id: install-anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
       run: |
         if [ ${{ runner.os }} == 'Linux' ]; then
           if [ ${{ runner.arch }} == "x86" ] || [ ${{ runner.arch }} == "x64" ]; then
             npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
+            anchor_dir=$(dirname "$(which anchor)")
+            echo "::set-output name=anchor-dir::$anchor_dir"
           fi
         else
           cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
