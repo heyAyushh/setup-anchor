@@ -30,17 +30,18 @@ runs:
       id: cache-anchor
       with:
         path: |
-          ~/.cargo/bin/
+          ~/.cargo/bin
           ~/.avm
+          ~/nvm/current/bin
         key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}
     - name: Install Anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
       run: |
-        cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
-        avm install ${{ inputs.anchor-version }}
-        avm use ${{ inputs.anchor-version }}
-      shell: bash
-    - name: Set Anchor Version
-      run: |
-        avm use ${{ inputs.anchor-version }}
+        if [ ${{ runner.os }} == 'Linux' ]; then
+          npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
+        else
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install ${{ inputs.anchor-version }}
+          avm use ${{ inputs.anchor-version }}
+        fi
       shell: bash
