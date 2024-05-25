@@ -15,7 +15,7 @@ inputs:
   anchor-version:
     description: 'Version of Anchor to use'
     required: false
-    default: '0.29.0' # latest
+    default: '0.30.0' # latest
 runs:
   using: 'composite'
   steps:
@@ -40,8 +40,6 @@ runs:
       run: |
         if [[ "${{ runner.os }}" == "Linux" && ("${{ runner.arch }}" == "X86" || "${{ runner.arch }}" == "X64") ]]; then
             npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
-            anchor_dir=$(dirname "$(which anchor)")
-            echo "name=anchor-dir::$anchor_dir" >> $GITHUB_OUTPUT
         else
           cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
           avm install ${{ inputs.anchor-version }}
