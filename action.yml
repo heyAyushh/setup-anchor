@@ -41,6 +41,7 @@ runs:
         if [[ "${{ runner.os }}" == "Linux" && ("${{ runner.arch }}" == "X86" || "${{ runner.arch }}" == "X64") ]]; then
             npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
             anchor_dir=$(dirname "$(which anchor)")
+            echo $anchor_dir
             echo "name=anchor-dir::$anchor_dir" >> $GITHUB_OUTPUT
         else
           cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
