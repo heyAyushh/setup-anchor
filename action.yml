@@ -22,7 +22,9 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        cache: npm
+      run: |
+        node -v
+        which node
     - name: Setup Solana
       uses: heyAyushh/setup-solana@v5.4
       with:
@@ -33,14 +35,14 @@ runs:
         path: |
           ~/.cargo/bin
           ~/.avm
-        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}
+          /opt/hostedtoolcache/node
+        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}-${{ hashFiles('/opt/hostedtoolcache/node') }}
     - name: Install Anchor
       id: install-anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
       run: |
         if [[ "${{ runner.os }}" == "Linux" && ("${{ runner.arch }}" == "X86" || "${{ runner.arch }}" == "X64") ]]; then
-            npm init -y
-            npm i @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
+            npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
         else
           cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
           avm install ${{ inputs.anchor-version }}
