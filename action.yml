@@ -39,7 +39,8 @@ runs:
       if: steps.cache-anchor.outputs.cache-hit != 'true'
       run: |
         if [[ "${{ runner.os }}" == "Linux" && ("${{ runner.arch }}" == "X86" || "${{ runner.arch }}" == "X64") ]]; then
-            npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
+            npm init -y
+            npm i @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
         else
           cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
           avm install ${{ inputs.anchor-version }}
