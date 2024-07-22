@@ -22,11 +22,11 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-    - name: Output Node path
+    - name: Output Node Version
+      id: node_v
       shell: bash
       run: |
-        node -v
-        which node
+        echo "node_v=$(node -v)" >> $GITHUB_OUTPUT
     - name: Setup Solana
       uses: heyAyushh/setup-solana@v5.4
       with:
@@ -38,7 +38,7 @@ runs:
           ~/.cargo/bin
           ~/.avm
           /opt/hostedtoolcache/node
-        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}-${{ hashFiles('/opt/hostedtoolcache/node/**') }}
+        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}-${{ steps.node_v.outputs.node_v }}
     - name: Install Anchor
       id: install-anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
