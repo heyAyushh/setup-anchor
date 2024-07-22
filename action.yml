@@ -38,7 +38,7 @@ runs:
           ~/.cargo/bin
           ~/.avm
           /opt/hostedtoolcache/node
-        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}-${{ hashFiles('/opt/hostedtoolcache/node') }}
+        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}-${{ hashFiles('/opt/hostedtoolcache/node/**') }}
     - name: Install Anchor
       id: install-anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
