@@ -23,7 +23,7 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
     - name: Setup Solana
-      uses: heyAyushh/setup-solana@v5.2
+      uses: heyAyushh/setup-solana@v5.4
       with:
         solana-cli-version: ${{ inputs.solana-cli-version }}
     - uses: actions/cache@v4
