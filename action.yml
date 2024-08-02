@@ -51,7 +51,7 @@ runs:
         if [[ "${{ runner.os }}" == "Linux" && ("${{ runner.arch }}" == "X86" || "${{ runner.arch }}" == "X64") && "${{ inputs.use-avm }}" != "true" ]]; then
           npm i -g @coral-xyz/anchor-cli@${{ inputs.anchor-version }}
         else
-          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          cargo install --git https://github.com/coral-xyz/anchor avm
           avm install ${{ inputs.anchor-version }}
           avm use ${{ inputs.anchor-version }}
         fi
