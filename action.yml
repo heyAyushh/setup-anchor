@@ -19,7 +19,7 @@ inputs:
   use-avm:
     description: 'Use Anchor Version Manager to install instead of npm'
     required: false
-    default: "true"
+    default: "false"
 
 runs:
   using: 'composite'
