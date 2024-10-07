@@ -33,7 +33,7 @@ runs:
       run: |
         echo "node_v=$(node -v)" >> $GITHUB_OUTPUT
     - name: Setup Solana
-      uses: heyAyushh/setup-solana@v5.4
+      uses: heyAyushh/setup-solana@v5.5
       with:
         solana-cli-version: ${{ inputs.solana-cli-version }}
     - uses: actions/cache@v4
