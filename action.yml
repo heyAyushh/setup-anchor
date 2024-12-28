@@ -7,11 +7,11 @@ inputs:
   node-version:
     description: 'Version of node.js to use'
     required: false
-    default: '20.15.0' # LTS
+    default: '22.12.0' # LTS
   solana-cli-version:
     description: 'Version of Solana CLI to use'
     required: false
-    default: '1.18.17' 
+    default: '2.0.21' # stable
   anchor-version:
     description: 'Version of Anchor to use'
     required: false
@@ -27,25 +27,42 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
+    
     - name: Output Node Version
       id: node_v
       shell: bash
       run: |
         echo "node_v=$(node -v)" >> $GITHUB_OUTPUT
+    
     - name: Setup Solana
       uses: heyAyushh/setup-solana@v5.5
       with:
         solana-cli-version: ${{ inputs.solana-cli-version }}
+    
+    # Cache Rust dependencies
+    - uses: actions/cache@v4
+      id: cache-rust
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ~/.cargo/bin
+          target/
+        key: rust-${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          rust-${{ runner.os }}-cargo-
+    
+    # Cache Anchor specific items
     - uses: actions/cache@v4
       id: cache-anchor
       with:
         path: |
-          ~/.cargo/bin
+          ~/.cargo/bin/anchor
           ~/.avm
           /opt/hostedtoolcache/node
-        key: anchor-cli-${{ runner.os }}-build-${{ inputs.anchor-version }}-node-${{ steps.node_v.outputs.node_v }}
+        key: anchor-cli-${{ runner.os }}-${{ inputs.anchor-version }}-node-${{ steps.node_v.outputs.node_v }}
+    
     - name: Install Anchor
-      id: install-anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
       run: |
         if [[ "${{ runner.os }}" == "Linux" && ("${{ runner.arch }}" == "X86" || "${{ runner.arch }}" == "X64") && "${{ inputs.use-avm }}" != "true" ]]; then
