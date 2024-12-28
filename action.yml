@@ -35,24 +35,18 @@ runs:
         echo "node_v=$(node -v)" >> $GITHUB_OUTPUT
     
     - name: Setup Solana
-      uses: heyAyushh/setup-solana@v5.6
+      uses: heyAyushh/setup-solana@v5.9
       with:
         solana-cli-version: ${{ inputs.solana-cli-version }}
     
-    # Cache Rust dependencies
-    - uses: actions/cache@v4
-      id: cache-rust
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          ~/.cargo/bin
-          target/
-        key: rust-${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          rust-${{ runner.os }}-cargo-
+    # Clean existing anchor installation
+    - name: Clean existing Anchor installation
+      run: |
+        rm -rf ~/.cargo/bin/anchor
+        rm -rf ~/.avm
+      shell: bash
     
-    # Cache Anchor specific items
+    # Cache Anchor specific items with version and week in key
     - uses: actions/cache@v4
       id: cache-anchor
       with:
@@ -60,7 +54,7 @@ runs:
           ~/.cargo/bin/anchor
           ~/.avm
           /opt/hostedtoolcache/node
-        key: anchor-cli-${{ runner.os }}-${{ inputs.anchor-version }}-node-${{ steps.node_v.outputs.node_v }}
+        key: anchor-${{ runner.os }}-${{ inputs.anchor-version }}-node-${{ steps.node_v.outputs.node_v }}-solana-${{ inputs.solana-cli-version }}-$(date +%Y%V)
     
     - name: Install Anchor
       if: steps.cache-anchor.outputs.cache-hit != 'true'
@@ -71,5 +65,12 @@ runs:
           cargo install --git https://github.com/coral-xyz/anchor avm
           avm install ${{ inputs.anchor-version }}
           avm use ${{ inputs.anchor-version }}
+        fi
+        
+        # Verify anchor version
+        INSTALLED_VERSION=$(anchor --version | grep -oP 'anchor-cli \K[0-9]+\.[0-9]+\.[0-9]+')
+        if [[ "$INSTALLED_VERSION" != "${{ inputs.anchor-version }}" ]]; then
+          echo "Anchor version mismatch! Expected ${{ inputs.anchor-version }} but got $INSTALLED_VERSION"
+          exit 1
         fi
       shell: bash
