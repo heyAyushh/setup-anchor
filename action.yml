@@ -7,19 +7,19 @@ inputs:
   node-version:
     description: 'Version of node.js to use'
     required: false
-    default: '22.14.0'
+    default: 'lts'
   solana-cli-version:
     description: 'Version of Solana CLI to use'
     required: false
-    default: '2.0.21'
+    default: 'stable'
   anchor-version:
     description: 'Version of Anchor to use'
     required: false
     default: '0.31.1'
   use-avm:
-    description: 'Use Anchor Version Manager to install instead of npm'
+    description: 'Use Anchor Version Manager (AVM) to install Anchor'
     required: false
-    default: "false"
+    default: "true"
 
 runs:
   using: 'composite'
@@ -56,7 +56,7 @@ runs:
         echo "ANCHOR_VERSION=${{ inputs.anchor-version }}" >> $GITHUB_ENV
         echo "NODE_VERSION=${{ steps.node_v.outputs.node_v }}" >> $GITHUB_ENV
         echo "SOLANA_VERSION=${{ inputs.solana-cli-version }}" >> $GITHUB_ENV
-        echo "key=anchor-${{ runner.os }}-${{ env.ANCHOR_VERSION }}-node-${{ env.NODE_VERSION }}-solana-${{ env.SOLANA_VERSION }}-$(( $(date +%W) / 4 ))" >> $GITHUB_OUTPUT
+        echo "key=anchor-${{ runner.os }}-${{ env.ANCHOR_VERSION }}-node-${{ env.NODE_VERSION }}-solana-${{ env.SOLANA_VERSION }}-${{ format '%Y-%m' (date) }}" >> $GITHUB_OUTPUT
 
     - name: Cache Anchor
       id: cache-anchor
