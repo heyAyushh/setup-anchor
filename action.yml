@@ -120,7 +120,7 @@ runs:
           exit 0
         fi
 
-    - name: Verify Anchor installation
+    - name: Verify Anchor and Rust installation
       shell: bash
       run: |
         if ! command -v anchor &> /dev/null; then
@@ -135,3 +135,6 @@ runs:
         if [[ ! "$anchor_version" == *"${{ inputs.anchor-version }}"* ]]; then
           echo "WARNING: Installed version ($anchor_version) may not match requested version (${{ inputs.anchor-version }})"
         fi
+        
+        rust_version=$(rustc --version | awk '{print $2}')
+        echo "Rust version: $rust_version"
