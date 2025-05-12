@@ -56,16 +56,20 @@ runs:
         echo "ANCHOR_VERSION=${{ inputs.anchor-version }}" >> $GITHUB_ENV
         echo "NODE_VERSION=${{ steps.node_v.outputs.node_v }}" >> $GITHUB_ENV
         echo "SOLANA_VERSION=${{ inputs.solana-cli-version }}" >> $GITHUB_ENV
-        echo "key=anchor-${{ runner.os }}-${{ env.ANCHOR_VERSION }}-node-${{ env.NODE_VERSION }}-solana-${{ env.SOLANA_VERSION }}-${{ format '%Y-%m' (date) }}" >> $GITHUB_OUTPUT
+
+        # cache key based on the current date
+        cache_date=$(date +%Y-%m)
+        echo "CACHE_DATE=$cache_date" >> $GITHUB_ENV
+        echo "key=anchor-${{ runner.os }}-${{ env.ANCHOR_VERSION }}-node-${{ env.NODE_VERSION }}-solana-${{ env.SOLANA_VERSION }}-${{ env.CACHE_DATE }}" >> $GITHUB_OUTPUT
 
     - name: Cache Anchor
       id: cache-anchor
       uses: actions/cache@v4
       with:
         path: |
+          ~/.cargo/bin/avm
           ~/.cargo/bin/anchor
           ~/.avm
-          /opt/hostedtoolcache/node
         key: ${{ steps.cache-key.outputs.key }}
         restore-keys: |
           anchor-${{ runner.os }}-
