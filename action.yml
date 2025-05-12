@@ -64,6 +64,7 @@ runs:
         path: |
           ~/.cargo/bin/avm
           ~/.cargo/bin/anchor
+          ~/.avm
           ~/.cargo/bin/
           ~/.cargo/registry/index/
           ~/.cargo/registry/cache/
