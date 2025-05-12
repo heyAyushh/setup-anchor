@@ -56,7 +56,7 @@ runs:
         echo "ANCHOR_VERSION=${{ inputs.anchor-version }}" >> $GITHUB_ENV
         echo "NODE_VERSION=${{ steps.node_v.outputs.node_v }}" >> $GITHUB_ENV
         echo "SOLANA_VERSION=${{ inputs.solana-cli-version }}" >> $GITHUB_ENV
-        echo "key=${{ runner.os }}-anchor-${{ env.ANCHOR_VERSION }}-solana-${{ env.SOLANA_VERSION }} >> $GITHUB_OUTPUT
+        echo "key=${{ runner.os }}-anchor-${{ env.ANCHOR_VERSION }}-solana-${{ env.SOLANA_VERSION }}" >> $GITHUB_OUTPUT
 
     - name: Cache Anchor
       id: cache-anchor
