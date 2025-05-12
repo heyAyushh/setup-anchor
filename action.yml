@@ -71,10 +71,6 @@ runs:
           ~/.cargo/bin/anchor
           ~/.avm
         key: ${{ steps.cache-key.outputs.key }}
-        restore-keys: |
-          anchor-${{ runner.os }}-
-          node-
-          solana-
 
     - name: Check for existing anchor installation
       id: check-anchor
