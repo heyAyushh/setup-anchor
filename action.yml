@@ -57,14 +57,17 @@ runs:
       run: |
         echo "key=${{ runner.os }}-anchor-v${{ inputs.anchor-version }}-solana-v$SOLANA_VERSION" >> $GITHUB_OUTPUT
 
-    - name: Cache Anchor
+    - name: Cache Anchor and Cargo
       id: cache-anchor
       uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/avm
           ~/.cargo/bin/anchor
-          ~/.avm
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
         key: ${{ steps.cache-key.outputs.key }}
 
     - name: Check for existing anchor installation
