@@ -36,7 +36,7 @@ runs:
         echo "Using Node version: $(node -v)"
     
     - name: Setup Solana
-      uses: heyAyushh/setup-solana@v5.9
+      uses: heyAyushh/setup-solana@v2.03
       with:
         solana-cli-version: ${{ inputs.solana-cli-version }}
     
